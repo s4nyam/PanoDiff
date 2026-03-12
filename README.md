@@ -187,6 +187,12 @@ Train PanoDiff and SR with the provided "how-to" files in each nested directorie
 
 
 <p align="center">
+  <img src="https://github.com/user-attachments/assets/55d95f60-7ae4-439e-b6d6-c87e6b4aaa65" alt="Quiz for Dentists" width="900"/>
+  <br>
+  <em>How quiz interface looks like with a sample image shown in main frame.</em>
+</p>
+
+<p align="center">
   <img src="https://dl3.pushbulletusercontent.com/IWhTJVlMsVK41NLhMmhx5sQREorwb4j6/image.png" alt="Results from Dentists" width="900"/>
   <br>
   <em>Table: Real vs synthetic image combinations and respective Fréchet inception distance (FID). Lower scores indicate greater similarity. <br/> Figure: Pie charts for each observer showing distribution of correct and incorrect decisions. ‘Fully’ and ‘partially’ refers to the level of certainty indicated by the observer for a given answer, as described in the text.</em>
