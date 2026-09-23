@@ -113,52 +113,9 @@ The scripts are the code that produced the published numbers, kept as they ran.
 
 ## Observer study
 
-## Observer study
-
 [`observer_study/`](observer_study) contains the Flask application used for the time-limited
 real-or-synthetic test (200 images, 12 s each) and the anonymised responses of the six observers
 (`submissions.csv`, observers EC1–EC3 and EP1–EP3).
-
-## Evaluation
-
-(Coming Soon!)
-
----
-
-## Results
-
-<p align="center">
-  <img src="https://dl3.pushbulletusercontent.com/Z4p3O7Esis2b0kpeELr1jCW0cqzf9kRD/image.png" alt="PanoDiffSR Epochs" width="800"/>
-  <br>
-  <em>Figure: Comparison of generated PRs across epochs. Each column represents a different epoch from left to right, showing the images generated using same unique seed per row.</em>
-</p>
-
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/55d95f60-7ae4-439e-b6d6-c87e6b4aaa65" alt="Quiz for Dentists" width="900"/>
-  <br>
-  <em>How quiz interface looks like with a sample image shown in main frame.</em>
-</p>
-
-<p align="center">
-  <img src="https://dl3.pushbulletusercontent.com/IWhTJVlMsVK41NLhMmhx5sQREorwb4j6/image.png" alt="Results from Dentists" width="900"/>
-  <br>
-  <em>Table: Real vs synthetic image combinations and respective Fréchet inception distance (FID). Lower scores indicate greater similarity. <br/> Figure: Pie charts for each observer showing distribution of correct and incorrect decisions. ‘Fully’ and ‘partially’ refers to the level of certainty indicated by the observer for a given answer, as described in the text.</em>
-</p>
-
-<p align="center">
-  <img src="https://dl3.pushbulletusercontent.com/Md1JLGjyrRviPOF8ES7PmAKFVMp9V7uN/image.png" alt="TP,TN,FP,FN" width="800"/>
-  <br>
-  <em>Figure: Examples of PRs from expert evaluation. Within each category, the first row corresponds to fully certain (FC) and the second row to partially certain (PC) responses. Examples were selected for each category based on the majority of the observers’ assessments.</em>
-</p>
-
-<p align="center">
-  <img src="https://dl3.pushbulletusercontent.com/woqS84fuYDbBVLZwLX6LV3biAeQxyvS2/image.png" alt="AMs" width="800"/>
-  <br>
-  <em>Figure: Attention maps generated using a trained ViT for two classes - top three rows for real images and bottom three rows for synthetic images. The confidence value ’C’ represents the ViT classifier’s output and ranges from 0 (for synthetic) to 1 (for real). Prediction values in red correspond to incorrect classification..</em>
-</p>
-
----
 
 ## Citation
 
