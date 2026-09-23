@@ -1,1 +1,0 @@
-just run python train.py and python generate.py
