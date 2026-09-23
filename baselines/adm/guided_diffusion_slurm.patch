@@ -1,0 +1,177 @@
+diff --git a/guided_diffusion/dist_util.py b/guided_diffusion/dist_util.py
+index 7acb48b..0393a4f 100644
+--- a/guided_diffusion/dist_util.py
++++ b/guided_diffusion/dist_util.py
+@@ -1,5 +1,12 @@
+ """
+ Helpers for distributed training.
++
++[LUMI port] The upstream file drives distribution through mpi4py, which is not
++present in the LUMI PyTorch container and is not the launcher LUMI uses anyway.
++This version derives rank/world/local-rank from the SLURM environment set by
++srun and talks to torch.distributed directly, matching the pattern used for the
++other runs on this machine. The public API (setup_dist, dev, load_state_dict,
++sync_params) is unchanged, so the rest of guided-diffusion is untouched.
+ """
+ 
+ import io
+@@ -7,77 +14,68 @@ import os
+ import socket
+ 
+ import blobfile as bf
+-from mpi4py import MPI
+ import torch as th
+ import torch.distributed as dist
+ 
+-# Change this to reflect your cluster layout.
+-# The GPU for a given rank is (rank % GPUS_PER_NODE).
+ GPUS_PER_NODE = 8
+-
+ SETUP_RETRY_COUNT = 3
+ 
+ 
++def _rank_world_local():
++    if "SLURM_PROCID" in os.environ and "SLURM_NTASKS" in os.environ:
++        rank = int(os.environ["SLURM_PROCID"])
++        world = int(os.environ["SLURM_NTASKS"])
++        local = int(os.environ.get("SLURM_LOCALID", rank % GPUS_PER_NODE))
++        return rank, world, local
++    if "RANK" in os.environ and "WORLD_SIZE" in os.environ:
++        rank = int(os.environ["RANK"])
++        world = int(os.environ["WORLD_SIZE"])
++        local = int(os.environ.get("LOCAL_RANK", rank % GPUS_PER_NODE))
++        return rank, world, local
++    return 0, 1, 0
++
++
+ def setup_dist():
+-    """
+-    Setup a distributed process group.
+-    """
++    """Setup a distributed process group from the SLURM environment."""
+     if dist.is_initialized():
+         return
+-    os.environ["CUDA_VISIBLE_DEVICES"] = f"{MPI.COMM_WORLD.Get_rank() % GPUS_PER_NODE}"
+-
+-    comm = MPI.COMM_WORLD
+-    backend = "gloo" if not th.cuda.is_available() else "nccl"
+-
+-    if backend == "gloo":
+-        hostname = "localhost"
+-    else:
+-        hostname = socket.gethostbyname(socket.getfqdn())
+-    os.environ["MASTER_ADDR"] = comm.bcast(hostname, root=0)
+-    os.environ["RANK"] = str(comm.rank)
+-    os.environ["WORLD_SIZE"] = str(comm.size)
+-
+-    port = comm.bcast(_find_free_port(), root=0)
+-    os.environ["MASTER_PORT"] = str(port)
+-    dist.init_process_group(backend=backend, init_method="env://")
++    rank, world, local = _rank_world_local()
++    if th.cuda.is_available():
++        th.cuda.set_device(local)
++    if world < 2:
++        return
++    os.environ.setdefault("MASTER_ADDR", os.environ.get("MASTER_ADDR", "127.0.0.1"))
++    os.environ.setdefault("MASTER_PORT", os.environ.get("MASTER_PORT", "29500"))
++    os.environ["RANK"] = str(rank)
++    os.environ["WORLD_SIZE"] = str(world)
++    backend = "nccl" if th.cuda.is_available() else "gloo"
++    dist.init_process_group(backend=backend, init_method="env://",
++                            rank=rank, world_size=world)
+ 
+ 
+ def dev():
+-    """
+-    Get the device to use for torch.distributed.
+-    """
++    """Get the device to use for torch.distributed."""
+     if th.cuda.is_available():
+-        return th.device(f"cuda")
++        return th.device(f"cuda:{_rank_world_local()[2]}")
+     return th.device("cpu")
+ 
+ 
+ def load_state_dict(path, **kwargs):
+-    """
+-    Load a PyTorch file without redundant fetches across MPI ranks.
+-    """
+-    chunk_size = 2 ** 30  # MPI has a relatively small size limit
+-    if MPI.COMM_WORLD.Get_rank() == 0:
+-        with bf.BlobFile(path, "rb") as f:
+-            data = f.read()
+-        num_chunks = len(data) // chunk_size
+-        if len(data) % chunk_size:
+-            num_chunks += 1
+-        MPI.COMM_WORLD.bcast(num_chunks)
+-        for i in range(0, len(data), chunk_size):
+-            MPI.COMM_WORLD.bcast(data[i : i + chunk_size])
+-    else:
+-        num_chunks = MPI.COMM_WORLD.bcast(None)
+-        data = bytes()
+-        for _ in range(num_chunks):
+-            data += MPI.COMM_WORLD.bcast(None)
++    """Load a state dict.
+ 
++    Upstream broadcast the bytes from rank 0 over MPI to avoid every rank
++    fetching from a remote blob store. Here the checkpoint sits on shared Lustre
++    that every rank can read directly, so each rank just loads it.
++    """
++    with bf.BlobFile(path, "rb") as f:
++        data = f.read()
+     return th.load(io.BytesIO(data), **kwargs)
+ 
+ 
+ def sync_params(params):
+-    """
+-    Synchronize a sequence of Tensors across ranks from rank 0.
+-    """
++    """Synchronize a sequence of Tensors across ranks from rank 0."""
++    if not dist.is_initialized():
++        return
+     for p in params:
+         with th.no_grad():
+             dist.broadcast(p, 0)
+diff --git a/guided_diffusion/image_datasets.py b/guided_diffusion/image_datasets.py
+index 93022ae..6d470dd 100644
+--- a/guided_diffusion/image_datasets.py
++++ b/guided_diffusion/image_datasets.py
+@@ -3,7 +3,9 @@ import random
+ 
+ from PIL import Image
+ import blobfile as bf
+-from mpi4py import MPI
++# [LUMI port] mpi4py is unavailable in the LUMI container; shard by the
++# SLURM rank that srun provides, via dist_util, instead.
++from . import dist_util
+ import numpy as np
+ from torch.utils.data import DataLoader, Dataset
+ 
+@@ -50,8 +52,8 @@ def load_data(
+         image_size,
+         all_files,
+         classes=classes,
+-        shard=MPI.COMM_WORLD.Get_rank(),
+-        num_shards=MPI.COMM_WORLD.Get_size(),
++        shard=dist_util._rank_world_local()[0],
++        num_shards=dist_util._rank_world_local()[1],
+         random_crop=random_crop,
+         random_flip=random_flip,
+     )
+diff --git a/guided_diffusion/script_util.py b/guided_diffusion/script_util.py
+index 2bfdad9..a48d1ed 100644
+--- a/guided_diffusion/script_util.py
++++ b/guided_diffusion/script_util.py
+@@ -146,7 +146,11 @@ def create_model(
+     use_new_attention_order=False,
+ ):
+     if channel_mult == "":
+-        if image_size == 512:
++        if image_size == 1024:
++            # [LUMI port] one extra stage above the released 512 config, so the
++            # coarsest map is the same 8x8 the authors attend over at 512.
++            channel_mult = (0.5, 0.5, 1, 1, 2, 2, 4, 4)
++        elif image_size == 512:
+             channel_mult = (0.5, 1, 1, 2, 2, 4, 4)
+         elif image_size == 256:
+             channel_mult = (1, 1, 2, 2, 4, 4)

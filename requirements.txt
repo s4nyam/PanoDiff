@@ -1,0 +1,26 @@
+# core pipeline
+torch>=2.0
+torchvision>=0.15
+numpy
+pillow
+scipy
+tqdm
+einops
+datasets            # panodiff/train.py loads the corpus as an imagefolder dataset
+diffusers           # learning-rate schedules in panodiff/train.py
+torchinfo
+basicsr>=1.4.2      # HAT-SR training and inference
+opencv-python
+pyyaml
+# evaluation
+torchmetrics[image]>=1.0
+torch-fidelity
+scikit-learn
+scikit-image
+lpips
+pandas
+matplotlib
+pymupdf             # figure scripts that read PDFs
+# observer-study application (optional)
+flask
+firebase-admin

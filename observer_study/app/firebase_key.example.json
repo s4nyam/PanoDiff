@@ -1,0 +1,7 @@
+{
+  "type": "service_account",
+  "project_id": "<your-firebase-project>",
+  "private_key_id": "<...>",
+  "private_key": "<...>",
+  "client_email": "<...>"
+}

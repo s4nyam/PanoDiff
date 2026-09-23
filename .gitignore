@@ -1,2 +1,15 @@
-
 .DS_Store
+__pycache__/
+*.pyc
+.venv/
+work/
+runs/
+samples/
+*.pth
+*.pt
+*.ckpt
+*.npz
+super_resolution/datasets/
+super_resolution/experiments/
+super_resolution/hat/data/meta_info/meta_info.txt
+observer_study/app/firebase_key.json
