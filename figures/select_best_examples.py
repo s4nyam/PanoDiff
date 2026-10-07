@@ -3,7 +3,7 @@ every arm, from the anatomical measures already computed by anatomy.py.
 
 Criterion (identical for every row):
   1. inside the central 98% range of REAL radiographs on all four measures, i.e. not a
-     gross failure by the paper's own definition (Table 11, last row);
+     outlier by the paper's own definition (Table 12, last row);
   2. no more crowns than the real images' 95th percentile, and occlusal depth within the
      real 10th-90th percentile: this excludes duplicated tooth rows (which inflate the
      crown count) and requires one clear bite line;

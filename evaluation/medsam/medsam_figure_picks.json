@@ -1,0 +1,91 @@
+{
+ "criterion": "complete dentitions shortlisted automatically (U-Net tooth region spans >=55% of the width, covers both arches without gaps, >=3 regions, not letterboxed), then the twelve of each set chosen by the authors for a full or near-full dentition and a clean radiograph; the shortlist rule is identical for both sets",
+ "real": [
+  {
+   "idx": 209,
+   "source": "ADLD"
+  },
+  {
+   "idx": 473,
+   "source": "ADLD"
+  },
+  {
+   "idx": 448,
+   "source": "ADLD"
+  },
+  {
+   "idx": 2611,
+   "source": "DENTEX"
+  },
+  {
+   "idx": 2101,
+   "source": "DENTEX"
+  },
+  {
+   "idx": 2142,
+   "source": "DENTEX"
+  },
+  {
+   "idx": 617,
+   "source": "TSXK"
+  },
+  {
+   "idx": 627,
+   "source": "TSXK"
+  },
+  {
+   "idx": 862,
+   "source": "TSXK"
+  },
+  {
+   "idx": 1345,
+   "source": "TUFTS"
+  },
+  {
+   "idx": 1930,
+   "source": "TUFTS"
+  },
+  {
+   "idx": 1750,
+   "source": "TUFTS"
+  }
+ ],
+ "syn": [
+  {
+   "idx": 1830
+  },
+  {
+   "idx": 2949
+  },
+  {
+   "idx": 1449
+  },
+  {
+   "idx": 79
+  },
+  {
+   "idx": 5087
+  },
+  {
+   "idx": 2125
+  },
+  {
+   "idx": 3057
+  },
+  {
+   "idx": 3705
+  },
+  {
+   "idx": 1887
+  },
+  {
+   "idx": 847
+  },
+  {
+   "idx": 5693
+  },
+  {
+   "idx": 4618
+  }
+ ]
+}

@@ -1,8 +1,9 @@
 """Process figure for the attention statistics of Section 4.3.
 
 Top row, left to right: a held-out radiograph; the attention-rollout map of the real-versus-
-synthetic ViT for it; the fixed anatomical templates (the 1000 TUFTS teeth and
-maxillomandibular masks averaged and thresholded at 0.5) with the three numbers that follow
+synthetic ViT for it; the fixed anatomical templates (the TUFTS teeth masks, the 968
+that are not empty, and the 1000 maxillomandibular masks, each averaged and thresholded at
+0.5; see evaluation/build_anatomical_prior.py) with the three numbers that follow
 for this image. Bottom row: the distributions of those numbers over the 1449 real and 1449
 synthetic held-out radiographs, recomputed here with the saved classifier
 (temp-codes/vit_realfake.pt) so the figure and the text come from the same model.

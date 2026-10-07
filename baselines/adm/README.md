@@ -16,5 +16,5 @@ PYTHONPATH=$PWD python scripts/image_train.py --data_dir <1024x1024 corpus> \
 ```
 
 ADM's code is square-only, so it was trained on the 1024 × 512 corpus resized to 1024 × 1024, and its
-samples are resized back to 1024 × 512 by `../sample.py`. 24,898 steps at global batch 32 is the
-110-epoch budget.
+samples are resized back to 1024 × 512 by `../sample.py`. 24,898 steps at global batch 32 are
+110 epochs, as for PanoDiff and every other arm (a training budget comparable to PanoDiff's).

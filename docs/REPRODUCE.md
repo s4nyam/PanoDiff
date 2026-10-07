@@ -46,7 +46,7 @@ $PANODIFF_WORK/
 | Table 10 (held-out restoration) | `evaluation/sr_restoration/prep_heldout_crop.py` → `restore_heldout.py` → `merge.py` |
 | Texture energy (Section 4.5.1) | `evaluation/distribution/texture_energy.py` |
 | Section 4.1 (observer statistics) | `evaluation/observer_study/observer_stats.py` |
-| Section 4.3 (ViT, attention statistics) | `evaluation/vit/vit_attention.py`; duplicate-aware split `evaluation/vit/leakage/` |
+| Section 4.3 (ViT, attention statistics) | `evaluation/build_anatomical_prior.py` → `evaluation/vit/vit_attention.py`; duplicate-aware split `evaluation/vit/leakage/` |
 | Section 4.4, Table 7, Figure 15 (MedSAM) | `evaluation/medsam/prepare_data_crop.py` → `medsam_probe.py` → `analyze_probe.py`, `make_medsam_figure.py` |
 | Table 11: training | `baselines/*/train*.py` (commands in `baselines/README.md`) |
 | Table 11: samples | `baselines/sample.py` |
@@ -54,7 +54,7 @@ $PANODIFF_WORK/
 | Table 11: precision, recall | `evaluation/distribution/extract_feats_t11.py` → `pr_ratios_t11.py`; robustness `recall_subsample.py` |
 | Table 11: ViT detectability | `evaluation/vit/vit_detect.py` |
 | Table 11: cost of rows 1-2 | `evaluation/efficiency/bench_train_cost.py`, `bench_fastgan_cost.py` |
-| Table 12, memorisation | `evaluation/anatomy_memorisation/anatomy.py` → `make_anat_table.py`; `memorisation.py` |
+| Table 12, memorisation | `evaluation/build_anatomical_prior.py` → `evaluation/anatomy_memorisation/anatomy.py` → `make_anat_table.py`; `memorisation.py` |
 | Section 4.5.3 (device FIDs) | `evaluation/device/metrics_stage1.py --crop 64 127 90 127 --resize 1024 512 --save-features` → `analyse_devices.py` |
 
 ## Conventions

@@ -2,10 +2,12 @@
 
     python3 analyze_probe_extra.py <out_dir> [<data_dir>]
 
-Reads <out_dir>/probe_shard*.csv. Prints the table of Table~\\ref{tab:medsam}, the device-vs-others
-ranges, MedSAM's Dice against the manual masks, the relative size of the dentition region, and the
-size-stratified effect for the dentition box (quintiles of the pooled reference area), which is the
-check that the dentition-box gap is not a size effect.
+Reads <out_dir>/probe_shard*.csv. Prints Table 7 (fixed box and dentition box), the largest
+real-synthetic |r| over mask size and shape and the device-vs-others range quoted in Section 4.4,
+and MedSAM's Dice against the manual masks. After that, checks that are not in the paper: the
+per-region protocol (dropped on 6 Oct 2026), the relative size of the dentition region with the
+size-stratified effect for the dentition box, and the number of tooth regions per image.
+'solidity' in the CSV is the extent of the mask (area over bounding-box area).
 """
 import os as _os
 WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
@@ -29,15 +31,21 @@ def col(sel, m):
     return np.array([float(r[m]) for r in sel if r[m] != ""])
 
 
-NAME = {"fixed": "Fixed box", "arch": "Dentition box", "teeth": "Tooth region"}
+NAME = {"fixed": "Fixed box", "arch": "Dentition box", "teeth": "Tooth region (NOT in the paper)"}
+shape_r, device_r = [], []
 for proto in ("fixed", "arch", "teeth"):
     sel = [r for r in rows if r["protocol"] == proto]
     real = [r for r in sel if r["set"] == "real"]; syn = [r for r in sel if r["set"] == "syn"]
+    if proto == "teeth":
+        print(f"\n== Section 4.4: size and shape |r| <= {max(shape_r):.2f}; device vs others |r| "
+              f"{min(device_r):.2f}-{max(device_r):.2f} (fixed and dentition box)")
     print(f"\n== {NAME[proto]}  (real {len(real)}, synthetic {len(syn)} prompts)")
     for m in ("pred_iou", "dice_ref", "area", "n_comp", "solidity"):
         a, b = col(real, m), col(syn, m)
         r, p = r_of(a, b)
-        print(f"   {m:9s} real {a.mean():8.3f}  syn {b.mean():8.3f}  r {r:+.2f}  p {p:.1e}")
+        if proto != "teeth" and m in ("area", "n_comp", "solidity"):
+            shape_r.append(abs(r))
+        print(f"   {m.replace('solidity', 'extent'):9s} real {a.mean():8.3f}  syn {b.mean():8.3f}  r {r:+.2f}  p {p:.1e}")
     g = col(real, "dice_gt")
     if len(g):
         print(f"   dice vs manual masks (real): {g.mean():.3f}")
@@ -48,9 +56,11 @@ for proto in ("fixed", "arch", "teeth"):
             a = col([x for x in real if x["source"] == src], m)
             b = col([x for x in real if x["source"] != src], m)
             rs.append(abs(r_of(a, b)[0]))
+        if proto != "teeth":
+            device_r += rs
         print(f"   device vs others |r| ({m}): {min(rs):.2f}-{max(rs):.2f}")
 
-# dentition region size and the size-stratified effect
+# dentition region size and the size-stratified effect (a check, not reported in the paper)
 sel = [r for r in rows if r["protocol"] == "arch"]
 ar = np.array([float(r["ref_area"]) for r in sel]); iou = np.array([float(r["pred_iou"]) for r in sel])
 isreal = np.array([r["set"] == "real" for r in sel])
@@ -71,7 +81,7 @@ for k in range(5):
         print(f"     Q{k + 1} ({ar[m].min():6.0f}-{ar[m].max():6.0f} px, real {len(a_):4d}, syn {len(s_):4d}): "
               f"real {a_.mean():.3f} syn {s_.mean():.3f}  r {r:+.2f}")
 
-# tooth regions per image
+# tooth regions per image (per-region protocol, not reported in the paper)
 cnt = collections.Counter((r["set"], r["idx"]) for r in rows if r["protocol"] == "teeth")
 tr = np.array([v for (s, _), v in cnt.items() if s == "real"]); ts = np.array([v for (s, _), v in cnt.items() if s == "syn"])
 print(f"\n== Tooth regions per image: real {tr.mean():.2f}, synthetic {ts.mean():.2f}, r {r_of(tr, ts)[0]:+.2f}")

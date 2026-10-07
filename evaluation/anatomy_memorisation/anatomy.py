@@ -1,13 +1,15 @@
 """Anatomical plausibility measures for synthetic panoramic radiographs.
 
-A clinician reading these images reports that the StyleGAN2-ADA samples, despite
-their low FID, contain implausible constructions -- jaw outlines that do not
-close, tooth rows that do not alternate regularly, crowns without roots. FID
-cannot see any of that: it compares pooled Inception statistics over a whole set
-and is insensitive to whether an individual image is anatomically coherent. This
-script turns that clinical reading into four measurements that a reviewer can
-check, each chosen because it is a property every real PR has and a generator can
-plausibly fail to reproduce.
+FID compares pooled Inception statistics over a whole set and cannot tell whether
+an individual image is anatomically coherent. This script measures four properties
+that every real PR has and a generator can fail to reproduce (Table 12, Section
+4.5.2). All four are computed from pixel intensities only, in the same way for every
+arm and for the real images (1500 images per set, fixed seed, 1024 x 512 greyscale),
+within two fixed regions built from the TUFTS expert masks by
+evaluation/build_anatomical_prior.py: the tooth region (pixels that are tooth in more
+than 35% of the 968 non-empty teeth masks) and the jaw region (jaw in more than half
+of the 1000 maxillomandibular masks). The tooth band is the rectangle enclosing the
+tooth region.
 
   symmetry     Pearson r between the jaw-masked image and its mirror. A PR images
                both hemi-arches in one projection, so it is approximately
@@ -16,16 +18,19 @@ plausibly fail to reproduce.
                tooth band that falls in the tooth-spacing band (period 20-60 px
                at 1024 width). Teeth form a quasi-periodic row; noise and blur
                both destroy this, in opposite directions.
-  n_crowns     Connected components of high-intensity enamel inside the tooth
-               prior, with a plausible area range. Proxy for how many distinct
-               crowns are actually rendered.
+  n_crowns     Connected components of 60-4000 px formed by the tooth-region pixels
+               brighter than its 88th percentile. A rough proxy for how many
+               distinct crowns are rendered: it counts bright blobs whether or not
+               they are teeth, but a duplicated tooth row roughly doubles it.
   occlusal     Depth of the dark occlusal line separating the upper and lower
                tooth rows, relative to the two bright rows around it.
 
 Every arm is scored, INCLUDING the ones that failed outright (Medfusion, the two
-FastGAN runs). Those are negative controls: a measure that does not separate pure
-noise from a real radiograph is not measuring anatomy, and should not be believed
-when it is applied to a close case.
+FastGAN runs). Those are negative controls. Noise-like output (Medfusion, FastGAN-HR)
+falls outside the real range almost always; the early FastGAN run, a near-constant
+featureless blur, mostly does not. The measures are global and coarse: they cannot
+see crown-root proportion, root shape or occlusion, and they are no substitute for
+FID/recall or for an expert reading.
 """
 import os as _os
 WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md

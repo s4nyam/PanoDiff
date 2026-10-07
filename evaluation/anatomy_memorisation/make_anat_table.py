@@ -1,6 +1,6 @@
-"""Anatomy table for the manuscript: per-measure means plus the gross-failure rate.
+"""Anatomy table for the manuscript (Table 12): per-measure means plus the outlier rate.
 
-The gross-failure row is the one that carries the argument, so it is computed here
+The outlier row ('Outside real range') is the one that carries the argument, so it is computed here
 rather than quoted: for each measure, take the interval spanned by the central 98%
 of REAL radiographs and report the fraction of an arm falling outside it on any
 measure. A perfectly calibrated generator scores the same as the real row.

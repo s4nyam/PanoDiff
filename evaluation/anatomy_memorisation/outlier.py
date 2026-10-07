@@ -1,10 +1,9 @@
-"""Gross-failure rate: how often does an arm produce an image that lies OUTSIDE
-the range real radiographs occupy?
+"""Outlier rate: how often does an arm produce an image that lies OUTSIDE the
+range real radiographs occupy?
 
-The means in anatomy.py answer "what does a typical sample look like", which is
-not the clinical complaint. The complaint is that a substantial minority of
-samples contain constructions no real radiograph would show. That is a tail
-question, so measure the tail: for each metric, take the [1st, 99th] percentile
+The means in anatomy.py describe a typical sample; a generator can match them and
+still produce a minority of samples that no real radiograph resembles. That is a
+tail question, so measure the tail: for each metric, take the [1st, 99th] percentile
 interval of the REAL images and report the fraction of each arm falling outside
 it. A perfectly calibrated generator would score 2% per metric by construction.
 """

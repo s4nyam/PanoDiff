@@ -11,11 +11,14 @@ an independent tooth model. Three prompt protocols, from model-free to anatomy-d
             (no model of ours involved at all)
   arch      one box around the tooth region predicted by the binary U-Net of the downstream
             study (trained on all 1888 real labels); identical procedure on both sets
-  teeth     one box per connected tooth component of that same U-Net prediction, so MedSAM
-            segments each tooth; a per-tooth score, plus how many teeth it was asked for
+  teeth     one box per connected component of that same U-Net prediction (a component can
+            hold several touching teeth). Still computed, but no longer reported in the paper:
+            a component is not an anatomical unit, so Table 7 and Figure 15 use fixed and
+            arch only (since 6 Oct 2026)
 
 Per prompt we record MedSAM's own predicted IoU (its confidence head), the mask area, the
-number of connected components, the solidity of the mask, and the Dice between MedSAM's mask
+number of connected components, the extent of the mask (its area over the area of its bounding
+box; the CSV column keeps the older name 'solidity'), and the Dice between MedSAM's mask
 and the U-Net reference (for real images also against the manual ground truth, which is the
 sanity check that MedSAM works on panoramics at all). Written as one CSV row per prompt.
 
@@ -85,6 +88,7 @@ def shape_stats(m):
         return dict(area=0, n_comp=0, solidity=0.0)
     ys, xs = np.nonzero(m)
     hull = (ys.max() - ys.min() + 1) * (xs.max() - xs.min() + 1)
+    # 'solidity' is the extent: mask area over bounding-box area (name kept for older CSVs)
     return dict(area=area, n_comp=int(n), solidity=float(area / hull))
 
 

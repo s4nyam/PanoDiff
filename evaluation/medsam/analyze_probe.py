@@ -10,6 +10,10 @@ out/medsam_stats.md. For every protocol and measure:
 Also per source dataset for the real images, so a synthetic-vs-real gap can be compared with the
 real-vs-real gaps between devices, and MedSAM's Dice against manual ground truth on real images
 (the check that MedSAM segments panoramic teeth at all).
+
+The paper reports the fixed and arch (dentition box) protocols; the per-region 'teeth' protocol
+is still summarised here but no longer reported. The column 'solidity' is the extent of the mask
+(area over bounding-box area).
 """
 import os as _os
 WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
