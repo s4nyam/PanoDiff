@@ -29,7 +29,7 @@ import torch
 import torch.nn as nn
 
 sys.path.insert(0, WORK + "/"
-                   "project-files/PanoDiff/Project/sd")
+                   "data/original-corpus/PanoDiff/Project/sd")
 _REPO = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))  # this repository
 sys.path[:0] = [_os.path.join(_REPO, "baselines"), _os.path.join(_REPO, "panodiff")]
 from simple_diffusion.model.unet import (  # noqa: E402

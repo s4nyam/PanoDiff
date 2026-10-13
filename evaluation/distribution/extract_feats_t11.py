@@ -1,4 +1,4 @@
-"""[Table 11 arms] One Inception pass per image set -> cached features for FID, KID, IS and precision/recall.
+"""[Table 10 arms] One Inception pass per image set -> cached features for FID, KID, IS and precision/recall.
 
 Uses torchmetrics' own network and input handling so the numbers are those of the paper's
 fid.py / is.py: NoTrainInceptionV3('inception-v3-compat'), images read with ToTensor() at native
@@ -6,6 +6,7 @@ size, normalize=True semantics (x*255 -> uint8), internal resize to 299. Both fe
 taken in the same pass: '2048' (pool, used by FID/KID/PR) and 'logits_unbiased' (used by IS).
 
 One set per SLURM rank; writes out/feats/<set>.npz (pool float32 [N,2048], logits float32 [N,1008]).
+"t11" in the file name is the earlier number of the direct high-resolution table (now Table 10).
 """
 import os as _os
 WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
@@ -18,12 +19,12 @@ from PIL import Image
 from torchmetrics.image.fid import NoTrainInceptionV3
 
 P = WORK
-LEG = f"{P}/project-files/PanoDiff/Syn-Calc-FID&IS"
-NEW = f"{P}/swinir-ft-eval/out"
+LEG = f"{P}/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+NEW = f"{P}/experiments/sr-distribution-metrics/out"
 # (name, folder, max images). Row 5 is cut to the 7243 FastGAN seeds that rows 3 and 7 use.
-# Table 11 direct high-resolution arms (the two-stage rows 4 and 5 and the real set 10 are
+# Table 10 direct high-resolution arms (the two-stage rows 4 and 5 and the real set 10 are
 # already in out/feats from extract_feats.py).
-NB = WORK + "/new-baselines-generation/samples"
+NB = WORK + "/experiments/direct-hr-baselines/samples"
 SETS = [("sg2ada", f"{NB}/sg2ada", None), ("sg3", f"{NB}/sg3", None),
         ("fastgan_lite64", f"{NB}/fastgan_lite64", None), ("adm", f"{NB}/adm", None),
         ("ldm", f"{NB}/ldm", None), ("panodiff_hr", f"{NB}/panodiff_hr", None)]

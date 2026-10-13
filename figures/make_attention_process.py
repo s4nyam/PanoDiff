@@ -6,7 +6,7 @@ that are not empty, and the 1000 maxillomandibular masks, each averaged and thre
 0.5; see evaluation/build_anatomical_prior.py) with the three numbers that follow
 for this image. Bottom row: the distributions of those numbers over the 1449 real and 1449
 synthetic held-out radiographs, recomputed here with the saved classifier
-(temp-codes/vit_realfake.pt) so the figure and the text come from the same model.
+(experiments/vit-attention/vit_realfake.pt) so the figure and the text come from the same model.
 
 Runs on CPU inside the LUMI PyTorch container: the ViT has 2.8 M parameters.
 """
@@ -22,9 +22,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 from torch.utils.data import DataLoader
 
-T = WORK + "/temp-codes"
-OUT = WORK + "/new-files/overleaf/figures/fig21-attn-process"
+T = WORK + "/experiments/vit-attention"
+OUT = WORK + "/manuscript/overleaf/figures/fig21-attn-process"
 sys.path.insert(0, T)
+# the copy in this repository: evaluation/vit/vit_attention.py
+sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), "evaluation", "vit"))
 from vit_attention import ViT, Pairs, build_split, rollout, H, W, P   # noqa: E402
 
 PT = 1 / 72.27

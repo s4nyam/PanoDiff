@@ -15,8 +15,8 @@ prompt is no longer reported (a region can hold several teeth and is not an anat
 Layout: four columns across the full text width (390 pt), each panel a 2:1 radiograph
 97.5 x 48.75 pt, a 9 pt label strip above the first row of each set. CPU is fine (24 image
 encodings, about two minutes).
-Environment: PROBE_DATA / PROBE_REF (default medsam-probe/data_crop), PROBE_OUT (where the badge
-values are written, default medsam-probe/out_crop), FIG_OUT (default the manuscript's figure
+Environment: PROBE_DATA / PROBE_REF (default experiments/medsam-probe/data_crop), PROBE_OUT (where the badge
+values are written, default experiments/medsam-probe/out_crop), FIG_OUT (default the manuscript's figure
 folder), PICKS (default medsam_figure_picks.json next to this script).
 """
 import json, os, sys
@@ -30,10 +30,10 @@ import torch
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from medsam_probe import load_medsam, embed, prompt, H, W, E   # noqa: E402
 
-PDATA = os.environ.get("PROBE_DATA", f"{E}/medsam-probe/data_crop")
-PREF = os.environ.get("PROBE_REF", f"{E}/medsam-probe/data_crop")
-POUT = os.environ.get("PROBE_OUT", f"{E}/medsam-probe/out_crop")
-FIGS = os.environ.get("FIG_OUT", f"{E}/new-files/overleaf/figures/fig20-medsam")
+PDATA = os.environ.get("PROBE_DATA", f"{E}/experiments/medsam-probe/data_crop")
+PREF = os.environ.get("PROBE_REF", f"{E}/experiments/medsam-probe/data_crop")
+POUT = os.environ.get("PROBE_OUT", f"{E}/experiments/medsam-probe/out_crop")
+FIGS = os.environ.get("FIG_OUT", f"{E}/manuscript/overleaf/figures/fig20-medsam")
 PICKS = os.environ.get("PICKS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "medsam_figure_picks.json"))
 PT = 1 / 72.27
 W_PT, NCOL, NROW, HEADER_PT = 390.0, 4, 3, 9.0

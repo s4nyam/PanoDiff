@@ -21,7 +21,7 @@ import torch
 from torchmetrics.image.fid import _compute_fid
 from torchmetrics.image.kid import poly_mmd
 
-FEATS = WORK + "/swinir-ft-eval/out/feats"
+FEATS = WORK + "/experiments/sr-distribution-metrics/out/feats"
 _cache = {}
 
 

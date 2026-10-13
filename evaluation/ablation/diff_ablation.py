@@ -21,7 +21,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-P = WORK + "/project-files/PanoDiff/Project"
+P = WORK + "/data/original-corpus/PanoDiff/Project"
 sys.path.insert(0, P + "/sd")
 
 from simple_diffusion.scheduler import DDIMScheduler        # noqa: E402

@@ -55,7 +55,7 @@ class Folder(Dataset):
         img = Image.open(self.names[i]).convert("RGB")
         if self.crop is not None:
             # the training corpus's fixed margins (top, left, bottom, right), capped at a
-            # quarter of the side as in medsam-probe/code/prepare_data_crop.py
+            # quarter of the side as in evaluation/medsam/prepare_data_crop.py
             t, l, b, r = self.crop
             w, h = img.size
             t, b = min(t, h // 4), min(b, h // 4)

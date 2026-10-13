@@ -1,11 +1,11 @@
-# Direct high-resolution baselines (paper Section 4.5.2, Table 11)
+# Direct high-resolution baselines (paper Section 4.5.2, Table 10)
 
-Every model generates 1024 × 512 radiographs directly and was trained from scratch on the same
+Every model generates 1024 × 512 radiographs directly and was trained from randomly initialised weights on the same
 7243 real PRs for 110 epochs (the budget of PanoDiff), with each method's own recommended
 settings. All StyleGAN, FastGAN and LDM models train natively at 512 × 1024 (height × width); only
 ADM, whose code is square-only, trained on 1024 × 1024 squashed images that were resized back.
 
-| Folder | Model | Paper row | Training command (per rank) | Ranks | Cost (acc.-h) |
+| Folder | Model | Paper row | Training command (per rank) | Ranks | Cost (GPU-h) |
 |---|---|---|---|---|---|
 | `stylegan2_lite/` | StyleGAN2-ADA (Karras et al., 2020) | 3 | `python train.py --out runs/sg2ada --epochs 110 --batch 1 --r1-gamma 8.2` | 32 | 441 |
 | `stylegan3_lite/` | StyleGAN3-T (Karras et al., 2021) | 4 | `python train.py --out runs/sg3 --epochs 110 --batch 1 --r1-gamma 8.2` | 32 | 572 |

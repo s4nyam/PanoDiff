@@ -17,8 +17,8 @@ from torchmetrics.image.inception import InceptionScore
 from PIL import Image
 
 P = WORK
-LEG = f"{P}/project-files/PanoDiff/Syn-Calc-FID&IS"
-NEW = f"{P}/swinir-ft-eval/out"
+LEG = f"{P}/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+NEW = f"{P}/experiments/sr-distribution-metrics/out"
 F = {  # folder aliases
     "10": f"{LEG}/10-TrainDataInHR", "4": f"{LEG}/4-DiffHATSR", "5": f"{LEG}/5-GANsHATSR",
     "6": f"{LEG}/6-DiffSwinIR",

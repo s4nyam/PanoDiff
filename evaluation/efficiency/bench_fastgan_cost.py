@@ -7,10 +7,10 @@ import torch.nn.functional as F
 from torch.nn.utils import spectral_norm
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
-SD = os.path.join(ROOT, "project-files/PanoDiff/Project/sd")
-SR = os.path.join(ROOT, "project-files/PanoDiff/Project/sr/training")
-FG = os.path.join(ROOT, "new-baselines-generation/repos/FastGAN-pytorch")
+ROOT = os.environ.get("PANODIFF_WORK", os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
+SD = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sd")
+SR = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sr/training")
+FG = os.path.join(ROOT, "experiments/direct-hr-baselines/repos/FastGAN-pytorch")
 dev = torch.device("cuda")
 N_WARM, N_TIME = 10, 40
 res = {"gpu": torch.cuda.get_device_name(0)}

@@ -1,6 +1,7 @@
-"""Figure-17-style precision (fidelity) / recall (coverage) curves for every model of Table 11.
+"""Figure-17-style precision (fidelity) / recall (coverage) curves for every model of Table 10
+(the direct high-resolution table; "t11" in the file name is its earlier number).
 
-Reads swinir-ft-eval/out/pr_ratios_t11.npz (code/pr_ratios_t11.py). Same construction as
+Reads experiments/sr-distribution-metrics/out/pr_ratios_t11.npz (evaluation/distribution/pr_ratios_t11.py). Same construction as
 make_pr_scores.py: per-image distance to the nearest image of the other set relative to its
 k = 3 neighbourhood radius; the share left of the dashed line is the precision or recall.
 Column (a): the GAN arms, column (b): the diffusion arms; PanoDiff-SR is drawn in both.
@@ -15,8 +16,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 
-SRC = WORK + "/swinir-ft-eval/out"
-OUT = WORK + "/new-files/figure-sources/pr_scores_t11/pr_scores_t11"
+SRC = WORK + "/experiments/sr-distribution-metrics/out"
+OUT = WORK + "/manuscript/figure-sources/pr_scores_t11/pr_scores_t11"
 
 PD = ("4", "PanoDiff-SR (1)", "#d1495b")
 COLS = [

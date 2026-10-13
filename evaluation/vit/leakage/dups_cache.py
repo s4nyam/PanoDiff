@@ -15,10 +15,12 @@ from multiprocessing import Pool
 import numpy as np
 from PIL import Image
 
-sys.path.insert(0, WORK + "/temp-codes")
+sys.path.insert(0, WORK + "/experiments/vit-attention")
+# the copy in this repository: evaluation/vit/vit_attention.py
+sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from vit_attention import REAL_DIR, SYNTH_DIR, H, W  # noqa: E402
 
-OUT = WORK + "/vit-leakage/out"
+OUT = WORK + "/experiments/vit-duplicate-leakage/out"
 EXT = (".png", ".jpg", ".jpeg")
 
 

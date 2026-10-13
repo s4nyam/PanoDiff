@@ -24,9 +24,9 @@ from multiprocessing import Pool
 import numpy as np
 import cv2
 
-O = WORK + "/project-files/PanoDiff/GT-PanoDiff-Training/Original_Datasets"
-SYN = WORK + "/project-files/PanoDiff/Syn-Calc-FID&IS/4-DiffHATSR"
-OUT = WORK + "/downstream-seg/data"
+O = WORK + "/data/original-corpus/PanoDiff/GT-PanoDiff-Training/Original_Datasets"
+SYN = WORK + "/data/original-corpus/PanoDiff/Syn-Calc-FID&IS/4-DiffHATSR"
+OUT = WORK + "/experiments/downstream-segmentation/data"
 H, W = 512, 1024
 FRACTIONS = [5, 10, 25, 50, 100]
 FDI = re.compile(r"^[1-4][1-8]$")

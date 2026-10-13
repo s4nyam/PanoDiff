@@ -5,7 +5,7 @@ WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work direct
 import os, sys, time
 import torch
 import torch.nn.functional as F
-B = WORK + "/new-baselines-generation"
+B = WORK + "/experiments/direct-hr-baselines"
 sys.path.insert(0, B)
 _REPO = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))  # this repository
 sys.path[:0] = [_os.path.join(_REPO, "baselines"), _os.path.join(_REPO, "panodiff")]

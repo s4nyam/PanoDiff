@@ -6,7 +6,7 @@ inputs). Each row applies one checkpoint to set 1 and compares the result with s
 
     hat_ft   HAT-SR as used in 4.5.1: net_g_400000, params_ema (reproduces set 4 from set 2)
     swin_ft  SwinIR fine-tuned on the PR pairs, as used in 4.5.1 (final_model.pth); these are
-             swinir-ft-eval/out/9ft-TrainSwinIRft, made from set 1 by infer_swinir_ft.py
+             experiments/sr-distribution-metrics/out/9ft-TrainSwinIRft, made from set 1 by infer_swinir_ft.py
     hat_pre  HAT, released weights (Real_HAT_GAN_SRx4, params_ema)
     swin_pre SwinIR, released weights (003_realSR_BSRGAN_DFO_s64w8_SwinIR-M_x4_GAN), with the
              preprocessing of infer_swinir_ft.py, which reproduces the paper's set 6
@@ -14,7 +14,7 @@ inputs). Each row applies one checkpoint to set 1 and compares the result with s
 The paper's set 8 (8-TrainHATSR) is NOT used: the HAT-SR checkpoint does not reproduce it
 (mean abs diff ~4.5 grey levels), nor do the released weights, so its provenance is unclear.
 
-Metrics are those of the earlier table (analysis/sr_ablation.py): PSNR and SSIM on luminance
+Metrics are those of the earlier table (evaluation/sr_restoration/sr_ablation.py): PSNR and SSIM on luminance
 (skimage, data_range 1) and LPIPS (AlexNet, inputs in [-1, 1]), each on the full image, computed
 from the saved 8-bit outputs so that every row is scored the same way.
 
@@ -34,15 +34,18 @@ from PIL import Image
 from skimage.metrics import peak_signal_noise_ratio as psnr_fn
 from skimage.metrics import structural_similarity as ssim_fn
 
-A = WORK + "/new-files/analysis"
+A = WORK + "/manuscript/analysis"
 sys.path.insert(0, A)
 from sr_ablation import load_hat, HAT_KW, to_tensor, to_uint8, luma, FT_DIR, PRETRAINED  # noqa: E402
-sys.path.insert(0, WORK + "/swinir-ft-eval/code")
+sys.path.insert(0, WORK + "/experiments/sr-distribution-metrics/code")
+# the copy in this repository: super_resolution/swinir/infer_swinir_ft.py
+sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))),
+                                 "super_resolution", "swinir"))
 import infer_swinir_ft as swi  # noqa: E402
 
 P = WORK
-LEG = f"{P}/project-files/PanoDiff/Syn-Calc-FID&IS"
-OUT = f"{P}/sr-restore-7243/out"
+LEG = f"{P}/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+OUT = f"{P}/experiments/sr-restoration/out"
 HR = f"{LEG}/10-TrainDataInHR"
 LR = f"{LEG}/1-TrainingDataInLR"
 HAT_PRE_DIR = f"{OUT}/8pre-TrainHATpre"
@@ -52,7 +55,7 @@ ROWS = {
     "hat_pre":  lambda n: f"{HAT_PRE_DIR}/{n[:-4]}__SR.png",
     "swin_pre": lambda n: f"{SWIN_PRE_DIR}/{n[:-4]}_SwinIR.png",
     "hat_ft":   lambda n: f"{HAT_FT_DIR}/{n[:-4]}__SR.png",
-    "swin_ft":  lambda n: f"{P}/swinir-ft-eval/out/9ft-TrainSwinIRft/{n[:-4]}_SwinIR.png",
+    "swin_ft":  lambda n: f"{P}/experiments/sr-distribution-metrics/out/9ft-TrainSwinIRft/{n[:-4]}_SwinIR.png",
 }
 
 

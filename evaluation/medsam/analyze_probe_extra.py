@@ -15,7 +15,7 @@ import collections, csv, glob, json, sys
 import numpy as np
 from scipy import stats
 
-OUT = sys.argv[1] if len(sys.argv) > 1 else WORK + "/medsam-probe/out"
+OUT = sys.argv[1] if len(sys.argv) > 1 else WORK + "/experiments/medsam-probe/out"
 rows = []
 for p in sorted(glob.glob(f"{OUT}/probe_shard*.csv")):
     rows += list(csv.DictReader(open(p)))

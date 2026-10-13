@@ -18,8 +18,8 @@ from PIL import Image
 from torchmetrics.image.fid import NoTrainInceptionV3
 
 P = WORK
-LEG = f"{P}/project-files/PanoDiff/Syn-Calc-FID&IS"
-NEW = f"{P}/swinir-ft-eval/out"
+LEG = f"{P}/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+NEW = f"{P}/experiments/sr-distribution-metrics/out"
 # (name, folder, max images). Row 5 is cut to the 7243 FastGAN seeds that rows 3 and 7 use.
 SETS = [
     ("1",   f"{LEG}/1-TrainingDataInLR", None), ("2", f"{LEG}/2-DiffLR", None),

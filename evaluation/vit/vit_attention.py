@@ -35,9 +35,9 @@ import torch.nn.functional as F
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 
-T = WORK + "/temp-codes"
+T = WORK + "/experiments/vit-attention"
 BASE = (WORK + "/"
-        "project-files/PanoDiff/Syn-Calc-FID&IS")
+        "data/original-corpus/PanoDiff/Syn-Calc-FID&IS")
 REAL_DIR = os.path.join(BASE, "10-TrainDataInHR")
 SYNTH_DIR = os.path.join(BASE, "4-DiffHATSR")
 H, W, P = 256, 512, 16                      # 16 x 32 = 512 patches

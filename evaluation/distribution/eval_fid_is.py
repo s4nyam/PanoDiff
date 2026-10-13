@@ -1,7 +1,7 @@
 """Score every baseline exactly as the paper's own numbers were scored.
 
 Comparability is the whole point of this file, so it deliberately reuses the
-protocol of project-files/PanoDiff/Syn-Calc-FID&IS/{fid.py,is.py} rather than a
+protocol of data/original-corpus/PanoDiff/Syn-Calc-FID&IS/{fid.py,is.py} rather than a
 "better" one:
   * torchmetrics FrechetInceptionDistance(normalize=True) / InceptionScore(normalize=True)
   * images read from a folder as PNG, ToTensor() only -- NO manual resize
@@ -25,7 +25,7 @@ from torchmetrics.image.fid import FrechetInceptionDistance
 from torchmetrics.image.inception import InceptionScore
 from PIL import Image
 
-REAL = (WORK + "/new-baselines-generation/refs/real")
+REAL = (WORK + "/experiments/direct-hr-baselines/refs/real")
 
 
 class Folder(Dataset):

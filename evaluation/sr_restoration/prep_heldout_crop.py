@@ -1,4 +1,7 @@
-"""Held-out real PRs for Table 10, prepared exactly as the training corpus was.
+"""Held-out real PRs for the restoration test, prepared exactly as the training corpus was.
+
+The restoration table is no longer in the paper. Section 3.4 quotes one result of this test:
+the LPIPS of HAT with the released and with the fine-tuned weights on these 185 radiographs.
 
 Same 185 DENTEX validation/test radiographs as prep_heldout.py (the 115 that are pixel-identical
 to DENTEX training images are excluded), but with the corpus preprocessing applied: every source
@@ -17,7 +20,7 @@ import numpy as np
 from PIL import Image
 
 Image.MAX_IMAGE_PIXELS = None
-E = WORK + "/sr-restore-7243"
+E = WORK + "/experiments/sr-restoration"
 SRC, OUT = f"{E}/heldout", f"{E}/heldout_crop"
 CROP = (64, 127, 90, 127)          # top, left, bottom, right, in original pixels
 

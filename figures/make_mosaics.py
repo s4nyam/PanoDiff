@@ -1,4 +1,4 @@
-"""The two qualitative mosaics of the comparative-analysis section, upright.
+"""The two qualitative mosaics of Section 4.5 (comparison with alternative models), upright.
 
 Layout rule for both: METHODS are rows, SAMPLES are columns, three columns across the
 full text width (390 pt), so each 2:1 radiograph is 130 x 65 pt -- about 40% larger
@@ -10,17 +10,19 @@ an earlier 90-degree version was the same size but unreadable in practice.
                       from the low-resolution sample through HAT-SR and SwinIR, for
                       PanoDiff and FastGAN. A zoom inset marks the same region in
                       every panel.
-  directhr_mosaic.pdf the direct-high-resolution comparison, best examples per row. The
-                      real and baseline rows come from select_best_examples.py (one
-                      criterion for every row, recorded in best_examples.json); the
-                      PanoDiff-SR row shows the three synthetic radiographs a majority of
-                      the six dentists judged real (unlabelled since 2026-09-22).
+  directhr_mosaic.pdf the direct-high-resolution comparison, three images per row drawn at
+                      random in the same way for every row, the real radiographs and
+                      PanoDiff-SR included: the picks come from select_random_examples.py
+                      (random_examples.json), which takes the first three images of the
+                      random 1500-image sample behind the anatomical table. No image is
+                      chosen or replaced by eye (since 2026-10-13; before that the rows
+                      showed selected examples).
 
 Run inside the LUMI PyTorch container (needs PIL + matplotlib).
 """
 import os as _os
 WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
-import csv, json, os
+import json, os
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -28,12 +30,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from PIL import Image
 
-LEG = WORK + "/project-files/PanoDiff/Syn-Calc-FID&IS"
-NB = WORK + "/new-baselines-generation"
-QUIZ = WORK + "/project-files/PanoDiff/PanoDiff-QuizData/quiz_fullres_mix"
-# SwinIR fine-tuned on the 7243 PR pairs (swinir-ft-eval/code/infer_swinir_ft.py), as used in Section 4.5.1
-SWFT = WORK + "/swinir-ft-eval/out"
-FIGS = WORK + "/new-files/overleaf/figures"
+LEG = WORK + "/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+NB = WORK + "/experiments/direct-hr-baselines"
+# SwinIR fine-tuned on the 7243 PR pairs (super_resolution/swinir/infer_swinir_ft.py), as used in Section 4.5.1
+SWFT = WORK + "/experiments/sr-distribution-metrics/out"
+FIGS = WORK + "/manuscript/overleaf/figures"
 
 PT = 1 / 72.27
 W_PT = 390.0          # \textwidth of the elsarticle preprint at 12pt
@@ -127,17 +128,7 @@ def lr_sr_mosaic():
 
 
 # ------------------------------------------------------ direct high-resolution
-def votes():
-    lab = {r["Filename"]: r["Label"] for r in csv.DictReader(open(f"{QUIZ}/image_labels.csv"))}
-    real = {}
-    for r in csv.DictReader(open(f"{QUIZ}/submissions.csv")):
-        if lab.get(r["File"]) == "Fake":
-            real.setdefault(r["File"], 0)
-            real[r["File"]] += "Real" in r["RealFakeValueSlider"]
-    return real
-
-
-def directhr_mosaic():
+def directhr_mosaic(out=None):
     rows = [
         ("Real radiographs",                                       "refs/real"),
         ("PanoDiff-SR (two-stage, this work)",                    "refs/PanoDiffSR_existing"),
@@ -147,33 +138,28 @@ def directhr_mosaic():
         ("LDM (direct, $1024\\times512$)",                         "samples/ldm"),
         ("PanoDiff-HR (direct, $1024\\times512$)",                 "samples/panodiff_hr"),
     ]
-    # The three synthetic PRs a majority of the six dentists judged real.
-    v = votes()
-    fooled = sorted(v, key=lambda f: -v[f])[:NCOL]
-    assert all(v[f] >= 4 for f in fooled), {f: v[f] for f in fooled}
-
-    best = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "best_examples.json")))["picks"]
-    key = {"refs/real": "real", "samples/sg2ada": "sg2ada", "samples/sg3": "sg3", "samples/adm": "adm",
-           "samples/ldm": "ldm", "samples/panodiff_hr": "panodiff_hr"}
+    # Three random images per row, the same draw for every row (select_random_examples.py).
+    picks = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "random_examples.json")))["picks"]
+    key = {"refs/real": "real", "refs/PanoDiffSR_existing": "PanoDiffSR_existing", "samples/sg2ada": "sg2ada",
+           "samples/sg3": "sg3", "samples/adm": "adm", "samples/ldm": "ldm", "samples/panodiff_hr": "panodiff_hr"}
     fig, h_pt = figure_for(len(rows))
     for r, (name, rel) in enumerate(rows):
         row_header(fig, r, h_pt, name, bold=(r == 1))
-        if r == 1:
-            pick = [f"{QUIZ}/static/fullres/{f}" for f in fooled]
-        else:
-            pick = best[key[rel]][:NCOL]
+        pick = picks[key[rel]]
+        assert len(pick) == NCOL and all(os.path.dirname(p) == os.path.join(NB, rel) for p in pick), (rel, pick)
         for c, p in enumerate(pick):
             ax = fig.add_axes(panel_box(r, c, h_pt))
             frame(ax, load_display(p))
-    out = f"{FIGS}/fig17-directhr"
+    out = out or f"{FIGS}/fig17-directhr"
     fig.savefig(f"{out}/directhr_mosaic.pdf", dpi=400, bbox_inches=None)
     fig.savefig(f"{out}/directhr_mosaic.png", dpi=170)
     plt.close(fig)
-    print("wrote", f"{out}/directhr_mosaic.pdf", "PanoDiff-SR row:", {f: v[f] for f in fooled})
+    print("wrote", f"{out}/directhr_mosaic.pdf")
 
 
 if __name__ == "__main__":
     import sys as _s
+    # --directhr-only: leave the LR/SR mosaic as it is; --out DIR: write the direct-HR mosaic to DIR
     if "--directhr-only" not in _s.argv:
         lr_sr_mosaic()
-    directhr_mosaic()
+    directhr_mosaic(_s.argv[_s.argv.index("--out") + 1] if "--out" in _s.argv else None)

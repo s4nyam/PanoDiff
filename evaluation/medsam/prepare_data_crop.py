@@ -13,7 +13,7 @@ The crop was recovered from the corpus: for sampled originals of all five source
 reproduces the matching corpus file (normalised-thumbnail similarity > 0.999, mean absolute
 pixel difference 0.5-3.5 grey levels, the remainder being the resampling implementation).
 
-Writes medsam-probe/data_crop/{real_img,real_msk}.npy, meta.json, fractions.json, and links the
+Writes experiments/medsam-probe/data_crop/{real_img,real_msk}.npy, meta.json, fractions.json, and links the
 unchanged synthetic arrays.
 """
 import os as _os
@@ -23,11 +23,11 @@ import numpy as np
 from multiprocessing import Pool
 from PIL import Image
 
-sys.path.insert(0, WORK + "/downstream-seg/code")
+sys.path.insert(0, WORK + "/experiments/downstream-segmentation/code")
 import prepare_data as pd  # noqa: E402
 
-OUT = WORK + "/medsam-probe/data_crop"
-OLD = WORK + "/downstream-seg/data"
+OUT = WORK + "/experiments/medsam-probe/data_crop"
+OLD = WORK + "/experiments/downstream-segmentation/data"
 CROP = (64, 127, 90, 127)          # top, left, bottom, right, in source pixels
 H, W = pd.H, pd.W
 

@@ -2,8 +2,10 @@
 
 FID compares pooled Inception statistics over a whole set and cannot tell whether
 an individual image is anatomically coherent. This script measures four properties
-that every real PR has and a generator can fail to reproduce (Table 12, Section
-4.5.2). All four are computed from pixel intensities only, in the same way for every
+that every real PR has and a generator can fail to reproduce. The paper reports
+three of them (symmetry, periodicity and occlusal; Table 11, Section 4.5.2). The
+fourth, the crown count n_crowns, is still computed and stored but is not reported
+in the paper. All four are computed from pixel intensities only, in the same way for every
 arm and for the real images (1500 images per set, fixed seed, 1024 x 512 greyscale),
 within two fixed regions built from the TUFTS expert masks by
 evaluation/build_anatomical_prior.py: the tooth region (pixels that are tooth in more
@@ -22,12 +24,13 @@ tooth region.
                brighter than its 88th percentile. A rough proxy for how many
                distinct crowns are rendered: it counts bright blobs whether or not
                they are teeth, but a duplicated tooth row roughly doubles it.
+               Not reported in the paper.
   occlusal     Depth of the dark occlusal line separating the upper and lower
                tooth rows, relative to the two bright rows around it.
 
 Every arm is scored, INCLUDING the ones that failed outright (Medfusion, the two
 FastGAN runs). Those are negative controls. Noise-like output (Medfusion, FastGAN-HR)
-falls outside the real range almost always; the early FastGAN run, a near-constant
+falls outside the real range in most images; the early FastGAN run, a near-constant
 featureless blur, mostly does not. The measures are global and coarse: they cannot
 see crown-root proportion, root shape or occlusion, and they are no substitute for
 FID/recall or for an expert reading.
@@ -40,8 +43,8 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage, stats
 
-B = WORK + "/new-baselines-generation"
-T = WORK + "/temp-codes"
+B = WORK + "/experiments/direct-hr-baselines"
+T = WORK + "/experiments/vit-attention"
 ARMS = [("real", "refs/real"), ("PanoDiffSR_existing", "refs/PanoDiffSR_existing"),
         ("FastGAN_HATSR_existing", "refs/FastGAN_HATSR_existing"),
         ("sg2ada", "samples/sg2ada"), ("adm", "samples/adm"), ("ldm", "samples/ldm"),

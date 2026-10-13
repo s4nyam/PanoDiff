@@ -1,10 +1,10 @@
-"""Training cost of the two-stage pipelines in the accelerator-hours of Table 11.
+"""Training cost of the two-stage pipelines in the GPU-hours of Table 10.
 
-Table 11 reports the direct high-resolution baselines in accelerator-hours on the
-accelerators credited in the Acknowledgment, whereas Table 2 gives PanoDiff-SR's
+Table 10 reports the direct high-resolution baselines in GPU-hours on the
+GPUs credited in the Acknowledgment, whereas Table 2 gives PanoDiff-SR's
 training wall-clock on the single RTX 6000 Ada it was trained on. To put rows 1 and 2
 on the same scale, this times one training step of each original stage on ONE of the
-Table 11 accelerators, with the original batch sizes, and multiplies by the original
+Table 10 GPUs, with the original batch sizes, and multiplies by the original
 number of steps:
 
   PanoDiff   UNet 34.0 M, 128x256, batch 4, L1 on the noise, AdamW;
@@ -26,10 +26,10 @@ import torch.nn.functional as F
 from torch.nn.utils import spectral_norm
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
-SD = os.path.join(ROOT, "project-files/PanoDiff/Project/sd")
-SR = os.path.join(ROOT, "project-files/PanoDiff/Project/sr/training")
-FG = os.path.join(ROOT, "new-baselines-generation/repos/FastGAN-pytorch")
+ROOT = os.environ.get("PANODIFF_WORK", os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
+SD = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sd")
+SR = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sr/training")
+FG = os.path.join(ROOT, "experiments/direct-hr-baselines/repos/FastGAN-pytorch")
 dev = torch.device("cuda")
 N_WARM, N_TIME = 10, 40
 res = {"gpu": torch.cuda.get_device_name(0)}

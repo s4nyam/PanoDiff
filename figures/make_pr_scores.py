@@ -1,6 +1,6 @@
 """Figure for Section 4.5.1: what precision (fidelity) and recall (coverage) in Table 9 measure.
 
-Reads the per-image scores from swinir-ft-eval/code/pr_ratios.py. For every generated image,
+Reads the per-image scores from evaluation/distribution/pr_ratios.py. For every generated image,
 the fidelity score is its distance to the nearest real image divided by that real image's
 neighbourhood radius (distance to its 3rd nearest real neighbour); for every real image, the
 coverage score is the same with the roles swapped. A score <= 1 means "inside", so the share of
@@ -17,8 +17,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 
-SRC = WORK + "/swinir-ft-eval/out/pr_ratios.npz"
-OUT = WORK + "/new-files/overleaf/figures/fig22-pr-scores/pr_scores"
+SRC = WORK + "/experiments/sr-distribution-metrics/out/pr_ratios.npz"
+OUT = WORK + "/manuscript/overleaf/figures/fig22-pr-scores/pr_scores"
 
 COLS = [
     ("(a) Low resolution ($256\\times128$)",

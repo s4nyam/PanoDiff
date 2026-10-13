@@ -1,4 +1,4 @@
-"""Step A: the existing classifier (temp-codes/vit_realfake.pt, 97.41% on its held-out set),
+"""Step A: the existing classifier (experiments/vit-attention/vit_realfake.pt, 97.41% on its held-out set),
 re-scored with the held-out real radiographs that also sit in its training half removed."""
 import os as _os
 WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
@@ -13,7 +13,7 @@ tr_r, va_r, tr_s, va_s = random_split(n, 0)
 leak = leaked(groups, tr_r, va_r)
 dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = ViT().to(dev).eval()
-model.load_state_dict(torch.load(WORK + "/temp-codes/vit_realfake.pt", map_location=dev))
+model.load_state_dict(torch.load(WORK + "/experiments/vit-attention/vit_realfake.pt", map_location=dev))
 pr = predict(model, real, va_r, dev); ps = predict(model, syn, va_s, dev)
 ok_r, ok_s = pr == 0, ps == 1
 res = {

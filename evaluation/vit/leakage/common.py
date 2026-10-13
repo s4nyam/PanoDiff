@@ -6,10 +6,12 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 
-sys.path.insert(0, WORK + "/temp-codes")
+sys.path.insert(0, WORK + "/experiments/vit-attention")
+# the copy in this repository: evaluation/vit/vit_attention.py
+sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from vit_attention import ViT  # noqa: E402,F401  (the architecture of the paper's classifier)
 
-OUT = WORK + "/vit-leakage/out"
+OUT = WORK + "/experiments/vit-duplicate-leakage/out"
 
 
 def load():

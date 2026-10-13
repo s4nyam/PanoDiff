@@ -22,9 +22,9 @@ from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from PIL import Image
 
-B = WORK + "/new-baselines-generation"
+B = WORK + "/experiments/direct-hr-baselines"
 sys.path.insert(0, B)
-sys.path.insert(0, WORK + "/project-files/PanoDiff/Project/sd")
+sys.path.insert(0, WORK + "/data/original-corpus/PanoDiff/Project/sd")
 _REPO = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))  # this repository
 sys.path[:0] = [_os.path.join(_REPO, "baselines"), _os.path.join(_REPO, "panodiff")]
 from panodiff_hr.unet_hr import UNetHR                      # noqa: E402

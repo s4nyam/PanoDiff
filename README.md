@@ -20,12 +20,12 @@ sampler to the small grid keeps the whole pipeline trainable on one GPU.
 
 ## Results at a glance
 
-Direct high-resolution synthesis against the two-stage pipeline (paper Table 11). All models were
+The two-stage pipeline against direct high-resolution generation (paper Section 4.5.2, Table 10). All models were
 trained on the same 7243 real PRs; FID and IS are computed against those 7243 images; precision and
 recall use k = 3; "ViT det." is the accuracy of a real-versus-synthetic classifier (lower is harder to
-detect); cost is in accelerator-hours on one accelerator type.
+detect); cost is in GPU-hours, all on the same type of GPU.
 
-| # | Model | FID ↓ | IS ↑ | Prec. (%) ↑ | Rec. (%) ↑ | ViT det. (%) ↓ | Cost (acc.-h) |
+| # | Model | FID ↓ | IS ↑ | Prec. (%) ↑ | Rec. (%) ↑ | ViT det. (%) ↓ | Cost (GPU-h) |
 |---|---|---|---|---|---|---|---|
 | 1 | **PanoDiff-SR (ours)** | 40.50 | 2.38 | 56.2 | **28.8** | 97.6 | **82** |
 | 2 | FastGAN + HAT-SR | 102.27 | 2.05 | 6.9 | 0.8 | 99.9 | 64 |
@@ -36,10 +36,11 @@ detect); cost is in accelerator-hours on one accelerator type.
 | 7 | LDM | 112.96 | 2.14 | 21.3 | 3.0 | 100.0 | 62 |
 | 8 | PanoDiff-HR (ours, direct) | 155.41 | 2.24 | 27.5 | 1.7 | 100.0 | 120 |
 
-- The same diffusion model trained directly at 1024 × 512 (row 8) is far worse than the two-stage
-  pipeline (row 1) and costs more to train.
-- The two StyleGANs reach a lower FID, at 5–7 times the training cost. Their lead is in fidelity
-  (precision); PanoDiff-SR has the highest recall, i.e. it covers more of the variety of real PRs.
+- PanoDiff-HR, a variant of PanoDiff with the U-Net widened to generate 1024 × 512 directly (row 8),
+  is far worse than the two-stage pipeline (row 1) and needs more training.
+- The two StyleGANs are ahead on FID and precision and are harder for the classifier to detect.
+  PanoDiff-SR is ahead on recall, i.e. it covers more of the variety of real PRs, and is five to
+  seven times cheaper to train.
 - Six dentists identified PanoDiff-SR images with 68.5% mean accuracy under time-limited viewing,
   against 78–82% reported for GAN-generated PRs in the literature.
 
@@ -53,7 +54,7 @@ PanoDiff/
 ├── data/                 corpus preparation (crop + resize of the five public datasets)
 ├── panodiff/             stage 1: diffusion model (training, DDIM sampling)
 ├── super_resolution/     stage 2: HAT-SR fine-tuning and inference; SwinIR comparison
-├── baselines/            direct high-resolution baselines of Table 11 (StyleGAN2-ADA, StyleGAN3,
+├── baselines/            direct high-resolution baselines of Table 10 (StyleGAN2-ADA, StyleGAN3,
 │                         FastGAN-HR, LDM, PanoDiff-HR, ADM patch) and the common sampler
 ├── evaluation/           every analysis in the paper, one folder per question
 ├── figures/              scripts that draw the paper's figures
@@ -110,6 +111,8 @@ and the fine-tuned HAT-SR model at
 [`docs/REPRODUCE.md`](docs/REPRODUCE.md) maps every table and figure to the script that produced it
 and describes the work-directory layout the evaluation scripts expect (set `PANODIFF_WORK`).
 The scripts are the code that produced the published numbers, kept as they ran.
+File names that contain `t11` belong to the direct high-resolution table, which is Table 10 of the
+paper (it was Table 11 in an earlier version).
 
 ## Observer study
 

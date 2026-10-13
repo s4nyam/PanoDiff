@@ -16,9 +16,9 @@ import types
 import torch
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
-SD = os.path.join(ROOT, "project-files/PanoDiff/Project/sd")
-SR = os.path.join(ROOT, "project-files/PanoDiff/Project/sr/training")
+ROOT = os.environ.get("PANODIFF_WORK", os.path.abspath("work"))  # work directory, see docs/REPRODUCE.md
+SD = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sd")
+SR = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sr/training")
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--steps", type=int, default=250)
@@ -124,7 +124,7 @@ hat = HAT(upscale=4, in_chans=3, img_size=64, window_size=16, compress_ratio=3,
 res["hat_params"] = sum(p.numel() for p in hat.parameters())
 print(f"HAT params: {res['hat_params']:,}")
 
-ckpt = os.path.join(ROOT, "project-files/PanoDiff/Project/sr/experiments/"
+ckpt = os.path.join(ROOT, "data/original-corpus/PanoDiff/Project/sr/experiments/"
                     "train_Real_HAT_GAN_SRx4_finetune_from_mse_model/models/"
                     "net_g_400000.pth")
 if os.path.exists(ckpt):

@@ -30,7 +30,7 @@ from torchmetrics.image.fid import FrechetInceptionDistance
 from PIL import Image
 import torchvision.transforms as T
 
-B = WORK + "/new-baselines-generation"
+B = WORK + "/experiments/direct-hr-baselines"
 REAL = os.path.join(B, "refs/real")
 ARMS = [("sg2ada", "samples/sg2ada"), ("adm", "samples/adm"), ("ldm", "samples/ldm"),
         ("panodiff_hr", "samples/panodiff_hr"),

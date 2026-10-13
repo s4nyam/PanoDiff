@@ -34,7 +34,7 @@ from PIL import Image
 from skimage.metrics import peak_signal_noise_ratio as psnr_fn
 from skimage.metrics import structural_similarity as ssim_fn
 
-P = WORK + "/project-files/PanoDiff/Project"
+P = WORK + "/data/original-corpus/PanoDiff/Project"
 HAT_ARCH = P + "/sr/training/hat/archs/hat_arch.py"
 FT_DIR = P + "/sr/experiments/train_Real_HAT_GAN_SRx4_finetune_from_mse_model/models"
 PRETRAINED = P + "/sr/training/experiments/pretrained_models/Real_HAT_GAN_SRx4.pth"

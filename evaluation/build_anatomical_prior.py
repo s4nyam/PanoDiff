@@ -1,5 +1,5 @@
 """Fixed anatomical regions used by the attention statistics (Section 4.3, Figure 14) and the
-anatomical measures (Table 12): population-level maps of where the teeth and the jaws lie in a
+anatomical measures (Table 11): population-level maps of where the teeth and the jaws lie in a
 panoramic radiograph, from the TUFTS dataset's expert segmentations.
 
 Per-image segmentations do not exist for synthetic radiographs, so a per-image mask is not
@@ -13,7 +13,7 @@ Thresholds are set where the maps are used: 0.5 for both templates in the attent
 statistics (evaluation/vit/vit_attention.py, figures/make_attention_process.py); teeth > 0.35
 and jaw > 0.5 for the anatomical measures (evaluation/anatomy_memorisation/anatomy.py).
 
-Writes $PANODIFF_WORK/temp-codes/priors/anatomical_priors.npz (keys teeth, jaw, background)
+Writes $PANODIFF_WORK/experiments/vit-attention/priors/anatomical_priors.npz (keys teeth, jaw, background)
 and one PNG per map. Run once, before the scripts above.
 """
 import os as _os
@@ -23,9 +23,9 @@ import os
 import numpy as np
 from PIL import Image
 
-OD = (WORK + "/project-files/PanoDiff/GT-PanoDiff-Training/Original_Datasets/"
+OD = (WORK + "/data/original-corpus/PanoDiff/GT-PanoDiff-Training/Original_Datasets/"
       "TUFTS - Tufts Panoramic Dataset/Tufts Database")
-OUT = WORK + "/temp-codes/priors"
+OUT = WORK + "/experiments/vit-attention/priors"
 W, H = 1024, 512
 
 REGIONS = {"teeth": os.path.join(OD, "Segmentation", "teeth_mask"),

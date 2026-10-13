@@ -21,7 +21,7 @@ import glob, json, csv, collections, sys
 import numpy as np
 from scipy import stats
 
-E = WORK + "/medsam-probe"
+E = WORK + "/experiments/medsam-probe"
 OUT = sys.argv[1] if len(sys.argv) > 1 else f"{E}/out"   # which probe run to summarise
 rows = []
 for p in sorted(glob.glob(f"{OUT}/probe_shard*.csv")):

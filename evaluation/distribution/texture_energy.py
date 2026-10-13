@@ -10,7 +10,7 @@ from PIL import Image
 from scipy.ndimage import laplace
 from multiprocessing import Pool
 P = WORK
-LEG = f"{P}/project-files/PanoDiff/Syn-Calc-FID&IS"; NEW = f"{P}/swinir-ft-eval/out"
+LEG = f"{P}/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"; NEW = f"{P}/experiments/sr-distribution-metrics/out"
 SETS = {"10 real HR": f"{LEG}/10-TrainDataInHR", "4 PanoDiff+HAT": f"{LEG}/4-DiffHATSR",
         "6 PanoDiff+SwinIR (released)": f"{LEG}/6-DiffSwinIR", "6ft PanoDiff+SwinIR (PR-ft)": f"{NEW}/6ft-DiffSwinIRft",
         "5 FastGAN+HAT": f"{LEG}/5-GANsHATSR", "7 FastGAN+SwinIR (released)": f"{LEG}/7-GANsSwinIR",

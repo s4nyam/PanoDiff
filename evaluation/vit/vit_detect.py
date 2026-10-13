@@ -1,14 +1,14 @@
 """Per-arm machine detectability, using the paper's OWN ViT protocol.
 
 The manuscript already trains a compact ViT to separate real PRs from PanoDiff-SR
-PRs and reports 97.7% test accuracy. Running that identical protocol against every
+PRs and reports 97.5% test accuracy. Running that identical protocol against every
 baseline turns "which images look real" into a measured quantity on the same axis
 the paper already uses, and it is the axis on which FID and realism can disagree:
 a model can match the reference distribution well (low FID) while still leaving
 per-image artefacts a classifier picks up immediately.
 
 One arm per SLURM task. Reuses the ViT, the 256x512 / patch-16 geometry and the
-attention-rollout code from temp-codes/vit_attention.py rather than reimplementing
+attention-rollout code from evaluation/vit/vit_attention.py rather than reimplementing
 them, so the numbers are comparable with the figure already in the paper.
 """
 import os as _os
@@ -20,11 +20,11 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 
-T = WORK + "/temp-codes"
+T = WORK + "/experiments/vit-attention"
 sys.path.insert(0, T)
 from vit_attention import ViT, rollout, H, W, P          # noqa: E402
 
-B = WORK + "/new-baselines-generation"
+B = WORK + "/experiments/direct-hr-baselines"
 REAL = os.path.join(B, "refs/real")
 
 ARMS = [

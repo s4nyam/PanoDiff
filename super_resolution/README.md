@@ -36,4 +36,5 @@ python test.py -opt options/test_HAT_GAN_Real_SRx4_PR.yml     # dataroot_lq: fol
 
 `swinir/infer_swinir_ft.py` runs the SwinIR that was fine-tuned on fixed fourfold area-downsampled
 pairs of the same radiographs. The restoration test on 185 held-out DENTEX radiographs is in
-[`evaluation/sr_restoration`](../evaluation/sr_restoration).
+[`evaluation/sr_restoration`](../evaluation/sr_restoration); Section 3.4 of the paper quotes its
+LPIPS for HAT with the released and with the fine-tuned weights.

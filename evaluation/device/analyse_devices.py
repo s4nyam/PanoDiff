@@ -27,7 +27,10 @@ import numpy as np
 
 from fid_fast import frechet_fast, stats_from
 
-T = WORK + "/temp-codes"
+# this analysis: stats_src/, stats_src_crop/, device_stratified*.json
+DEVICE_DIR = WORK + "/experiments/device-stratified-fid"
+# the FID/IS recomputation: stats/, stats_orderedsplit/ (features of the pooled sets)
+FID_DIR = WORK + "/experiments/fid-is-recomputation"
 N_DRAWS = 5
 
 
@@ -46,7 +49,7 @@ def matched_fid(fa, fb, n, draws=N_DRAWS, seed=0):
 src = {}
 SRC = os.environ.get("SRC_DIR", "stats_src")          # stats_src_crop = corpus preprocessing
 OUT_JSON = os.environ.get("OUT_JSON", "device_stratified.json")
-for f in sorted(glob.glob(os.path.join(T, SRC, "src-*.npz"))):
+for f in sorted(glob.glob(os.path.join(DEVICE_DIR, SRC, "src-*.npz"))):
     d = np.load(f, allow_pickle=True)
     name = str(d["name"]).replace("src-", "")
     if "features" not in d:
@@ -58,7 +61,7 @@ for f in sorted(glob.glob(os.path.join(T, SRC, "src-*.npz"))):
 gen = {}
 for tag, fn in [("PD-HR", "4-DiffHATSR"), ("GT-HR", "10-TrainDataInHR"),
                 ("GAN-HR", "5-GANsHATSR")]:
-    for d in (os.path.join(T, "stats"), os.path.join(T, "stats_orderedsplit")):
+    for d in (os.path.join(FID_DIR, "stats"), os.path.join(FID_DIR, "stats_orderedsplit")):
         p = os.path.join(d, fn + ".npz")
         if os.path.exists(p):
             z = np.load(p, allow_pickle=True)
@@ -126,5 +129,5 @@ print("the spread of the first row against the spread of the second.")
 json.dump({"synthetic_vs_device": rows, "device_vs_device": pair_rows,
            "matched_n": int(n_match), "draws": N_DRAWS,
            "floor": {"mean": m_self, "sd": s_self}},
-          open(os.path.join(T, OUT_JSON), "w"), indent=2)
+          open(os.path.join(DEVICE_DIR, OUT_JSON), "w"), indent=2)
 print(f"\nwrote {OUT_JSON}")

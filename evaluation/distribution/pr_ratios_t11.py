@@ -1,10 +1,11 @@
-"""Per-image precision/recall scores (as in pr_ratios.py / Figure 17) for every model of Table 11.
+"""Per-image precision/recall scores (as in pr_ratios.py / Figure 17) for every model of Table 10
+(the direct high-resolution table; "t11" in the file name is its earlier number).
 
 Same features (Inception pool, torchmetrics network), same k = 3 and the same ratio definition:
     fidelity score of generated g = min over real r      of |g - r| / radius_real(r)
     coverage score of real r      = min over generated g of |r - g| / radius_gen(g)
-share <= 1 = precision / recall. Rows 1 and 2 of Table 11 (sets 4 and 5) are checked against
-Table 9; FID is recomputed from the same features as a check against Table 11.
+share <= 1 = precision / recall. Rows 1 and 2 of Table 10 (sets 4 and 5) are checked against
+Table 9; FID is recomputed from the same features as a check against Table 10.
 
 Writes out/pr_ratios_t11.npz and out/pr_t11.json.
 """
@@ -14,7 +15,7 @@ import json
 import numpy as np
 from scipy import linalg
 
-E = WORK + "/swinir-ft-eval/out"
+E = WORK + "/experiments/sr-distribution-metrics/out"
 ARMS = ["4", "5", "sg2ada", "sg3", "fastgan_lite64", "adm", "ldm", "panodiff_hr"]
 K = 3
 

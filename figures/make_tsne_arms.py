@@ -20,11 +20,11 @@ WORK = _os.environ.get("PANODIFF_WORK", _os.path.abspath("work"))  # work direct
 import argparse, json, os
 import numpy as np
 
-LEGACY = WORK + "/project-files/PanoDiff/Syn-Calc-FID&IS"
-DIRECT = WORK + "/new-baselines-generation/samples"
-OUT = WORK + "/new-files/analysis/tsne_arms"
-FIG = WORK + "/new-files/overleaf/figures/fig19-tsne-arms"
-SWFT = WORK + "/swinir-ft-eval/out"   # PR-fine-tuned SwinIR
+LEGACY = WORK + "/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+DIRECT = WORK + "/experiments/direct-hr-baselines/samples"
+OUT = WORK + "/manuscript/analysis/tsne_arms"
+FIG = WORK + "/manuscript/overleaf/figures/fig19-tsne-arms"
+SWFT = WORK + "/experiments/sr-distribution-metrics/out"   # PR-fine-tuned SwinIR
 RESNET = _os.path.expanduser("~/.cache/torch/hub/checkpoints/resnet50-19c8e357.pth")
 
 N_PER_ARM = 1500

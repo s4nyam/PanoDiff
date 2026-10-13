@@ -37,7 +37,7 @@ import torch.nn.functional as F
 from scipy import ndimage
 
 E = WORK
-D = f"{E}/downstream-seg/data"
+D = f"{E}/experiments/downstream-segmentation/data"
 CKPT = WORK + "/weights/medsam_vit_b_official.pth"
 H, W, S = 512, 1024, 1024
 FIXED_BOX = (0.15, 0.30, 0.85, 0.80)        # x0, y0, x1, y1 as image fractions: the dental region
@@ -108,9 +108,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--shard", type=int, default=0); ap.add_argument("--nshards", type=int, default=1)
     ap.add_argument("--limit", type=int, default=0)
-    ap.add_argument("--out", default=f"{E}/medsam-probe/out")
+    ap.add_argument("--out", default=f"{E}/experiments/medsam-probe/out")
     ap.add_argument("--data", default=D, help="directory with real_img/real_msk/syn_img.npy and meta.json")
-    ap.add_argument("--ref", default=f"{E}/medsam-probe/data", help="directory with ref_real.npy and ref_syn.npy")
+    ap.add_argument("--ref", default=f"{E}/experiments/medsam-probe/data", help="directory with ref_real.npy and ref_syn.npy")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")

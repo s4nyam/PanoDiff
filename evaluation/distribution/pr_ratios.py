@@ -17,7 +17,7 @@ import json
 import numpy as np
 import torch
 
-E = WORK + "/swinir-ft-eval/out"
+E = WORK + "/experiments/sr-distribution-metrics/out"
 PAIRS = [("1", "2"), ("1", "3"), ("10", "4"), ("10", "5"), ("10", "6ft"), ("10", "7ft")]
 K = 3
 dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")

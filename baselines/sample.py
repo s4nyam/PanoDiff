@@ -22,7 +22,7 @@ import torch
 import torch.distributed as dist
 from PIL import Image
 
-B = WORK + "/new-baselines-generation"
+B = WORK + "/experiments/direct-hr-baselines"
 sys.path.insert(0, B)
 _REPO = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # this repository
 sys.path[:0] = [_os.path.join(_REPO, "baselines"), _os.path.join(_REPO, "panodiff")]
@@ -54,7 +54,7 @@ def save_batch(arr, idxs, outdir):
 # ------------------------------------------------------------------ builders
 def build_panodiff_hr(dev):
     sys.path.insert(0, WORK + "/"
-                       "project-files/PanoDiff/Project/sd")
+                       "data/original-corpus/PanoDiff/Project/sd")
     from panodiff_hr.unet_hr import UNetHR
     from simple_diffusion.scheduler import DDIMScheduler
     net = UNetHR().to(dev).eval()
@@ -176,7 +176,7 @@ def build_fastgan_lite64(dev):
 def build_ldm(dev):
     """Our latent diffusion -- DDIM in the VAE latent space, then decode."""
     sys.path.insert(0, WORK + "/"
-                       "project-files/PanoDiff/Project/sd")
+                       "data/original-corpus/PanoDiff/Project/sd")
     from ldm_lite.vae import VAE
     from simple_diffusion.model.unet import UNet
     from simple_diffusion.scheduler import DDIMScheduler

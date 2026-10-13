@@ -9,7 +9,8 @@ both upscalers in 4.5.1 have seen the PR data.
 Only the weights change. Preprocessing replicates main_test_swinir.py, which made the original
 outputs: RGB in [0,1], flip-padding to a multiple of the window (8), 4x forward pass, crop to
 4x the input, clamp, round to uint8. Architecture, strict loading and the timm stub are those
-of new-files/analysis/swinir_r4maj2/swinir_matched.py, which produced Table 10.
+of manuscript/analysis/swinir_r4maj2/swinir_matched.py, which produced the restoration
+table of an earlier version of the manuscript.
 
 Sharded over SLURM tasks: rank r of W processes items[r::W]; existing outputs are skipped, so
 the job is resumable. Rank 0 first regenerates --validate images with the PRE-TRAINED weights
@@ -27,12 +28,12 @@ import torch.nn.init as init
 from PIL import Image
 
 P = WORK
-LEG = f"{P}/project-files/PanoDiff/Syn-Calc-FID&IS"
-SW = f"{P}/my-old-machine-just-got-recovered/swinir"
+LEG = f"{P}/data/original-corpus/PanoDiff/Syn-Calc-FID&IS"
+SW = f"{P}/archive/recovered-workstation/swinir"
 SW_PRE = f"{SW}/experiments/pretrained_models/003_realSR_BSRGAN_DFO_s64w8_SwinIR-M_x4_GAN.pth"
 SW_FT = f"{SW}/checkpoints/finetune/final_model.pth"
-STOCK = f"{P}/new-files/analysis/swinir_r4maj2/network_swinir_stock.py"
-OUT = f"{P}/swinir-ft-eval/out"
+STOCK = f"{P}/manuscript/analysis/swinir_r4maj2/network_swinir_stock.py"
+OUT = f"{P}/experiments/sr-distribution-metrics/out"
 SETS = [  # (input LR folder, output folder) -- output names mirror the paper's 6/7/9 folders
     ("2-DiffLR",           "6ft-DiffSwinIRft"),
     ("3-GANsLR",           "7ft-GANsSwinIRft"),

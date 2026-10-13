@@ -10,7 +10,7 @@ import csv, glob, json, os, sys
 import numpy as np
 from scipy.stats import wilcoxon
 
-E = WORK + "/sr-restore-7243"
+E = WORK + "/experiments/sr-restoration"
 HELD = len(sys.argv) > 1 and sys.argv[1] == "heldout"
 OUT = os.environ.get("HELD_DIR", f"{E}/heldout") if HELD else f"{E}/out"
 N = 185 if HELD else 7243

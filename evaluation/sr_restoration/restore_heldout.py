@@ -1,6 +1,7 @@
-"""Table 10 on held-out real PRs: the four checkpoints of restore_metrics.py applied to the 185
+"""Restoration test on held-out real PRs: the four checkpoints of restore_metrics.py applied to the 185
 DENTEX validation/test radiographs of prep_heldout.py (LR -> 1024x512), scored against HR with
-the same PSNR/SSIM (luminance) and LPIPS (AlexNet) as before.
+the same PSNR/SSIM (luminance) and LPIPS (AlexNet) as before. The table of this test is no longer in
+the paper; Section 3.4 quotes the LPIPS of the rows hat_pre and hat_ft.
 
 Rank 0 first checks that the fine-tuned SwinIR path reproduces the paper's 9ft set (made by
 infer_swinir_ft.py from set 1); the HAT-SR checkpoint was checked against set 4 in the 7243 run.
@@ -18,7 +19,7 @@ import restore_metrics as rm  # noqa: E402  (HAT/SwinIR loaders, upscalers, metr
 from restore_metrics import hat, upscale, swin_up, swi, luma, psnr_fn, ssim_fn, FT_DIR, PRETRAINED  # noqa: E402
 
 H = os.environ.get("HELD_DIR",
-                   WORK + "/sr-restore-7243/heldout")
+                   WORK + "/experiments/sr-restoration/heldout")
 MAKERS = {
     "hat_pre":  lambda dev: (hat(PRETRAINED, dev), upscale),
     "swin_pre": lambda dev: (swi.build(swi.SW_PRE, dev), swin_up),

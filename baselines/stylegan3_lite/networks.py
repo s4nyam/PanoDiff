@@ -33,7 +33,7 @@ import torch
 import torch.nn.functional as F
 
 os.environ.setdefault("SG_FORCE_REF", "1")          # never try to build the CUDA ops
-REPO = _os.environ.get("STYLEGAN3_REPO", WORK + "/new-baselines-generation/repos/stylegan3")  # clone of NVlabs/stylegan3
+REPO = _os.environ.get("STYLEGAN3_REPO", WORK + "/experiments/direct-hr-baselines/repos/stylegan3")  # clone of NVlabs/stylegan3
 if REPO not in sys.path:
     sys.path.insert(0, REPO)
 from training import networks_stylegan3 as nv                      # noqa: E402
