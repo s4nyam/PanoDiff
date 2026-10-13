@@ -66,8 +66,8 @@ names for the same folders.
 | Tables 3, 4, 8, 9 (FID, KID, IS, precision, recall) | `evaluation/distribution/extract_feats.py` → `metrics_from_feats.py` |
 | Figure 16 (t-SNE of every arm) | `figures/make_tsne_arms.py` |
 | Figure 17 (per-image precision/recall) | `evaluation/distribution/pr_ratios.py` → `figures/make_pr_scores.py` |
-| Figure 18 (LR → HAT-SR / SwinIR mosaic), Figure 19 (direct-HR mosaic, three random images per row) | `figures/select_random_examples.py` (after `evaluation/anatomy_memorisation/anatomy.py`) → `figures/make_mosaics.py` |
-| Caption of Figure 19: share of images with a block of horizontal streaks at the border (real and LDM) | `evaluation/anatomy_memorisation/border_streaks.py` |
+| Figure 18 (LR → HAT-SR / SwinIR mosaic), Figure 19 (direct-HR mosaic, three hand-picked examples per row) | `figures/make_mosaics.py`; the examples of Figure 19 are listed in `figures/directhr_examples.json` |
+| Caption of Figure 19: share of images with a block of horizontal streaks at the border (real, PanoDiff-SR and LDM) | `evaluation/anatomy_memorisation/border_streaks.py` |
 | Texture energy (Section 4.5.1) | `evaluation/distribution/texture_energy.py` |
 | Section 4.1 (observer statistics) | `evaluation/observer_study/observer_stats.py` |
 | Section 4.3 (ViT, attention statistics) | `evaluation/build_anatomical_prior.py` → `evaluation/vit/vit_attention.py`; duplicate-aware split `evaluation/vit/leakage/` |

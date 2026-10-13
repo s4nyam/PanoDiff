@@ -1,0 +1,14 @@
+{
+  "figure": "direct high-resolution comparison (Figure 19 of the manuscript), three examples per row, in column order",
+  "selection": "chosen by hand by the first author on 13 October 2026, by looking through the images of each set; the same list is used on every build",
+  "base": "experiments/direct-hr-baselines",
+  "rows": {
+    "refs/real": ["train_00000016.png", "train_00000067.png", "train_00000082.png"],
+    "refs/PanoDiffSR_existing": ["generated_000044__SR.png", "generated_000047__SR.png", "generated_000083__SR.png"],
+    "samples/sg2ada": ["gen_000027.png", "gen_000047.png", "gen_000070.png"],
+    "samples/sg3": ["gen_000021.png", "gen_000097.png", "gen_000181.png"],
+    "samples/adm": ["gen_000188.png", "gen_000466.png", "gen_004202.png"],
+    "samples/ldm": ["gen_000144.png", "gen_000172.png", "gen_000225.png"],
+    "samples/panodiff_hr": ["gen_002877.png", "gen_003156.png", "gen_003990.png"]
+  }
+}

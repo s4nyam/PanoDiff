@@ -10,13 +10,13 @@ an earlier 90-degree version was the same size but unreadable in practice.
                       from the low-resolution sample through HAT-SR and SwinIR, for
                       PanoDiff and FastGAN. A zoom inset marks the same region in
                       every panel.
-  directhr_mosaic.pdf the direct-high-resolution comparison, three images per row drawn at
-                      random in the same way for every row, the real radiographs and
-                      PanoDiff-SR included: the picks come from select_random_examples.py
-                      (random_examples.json), which takes the first three images of the
-                      random 1500-image sample behind the anatomical table. No image is
-                      chosen or replaced by eye (since 2026-10-13; before that the rows
-                      showed selected examples).
+  directhr_mosaic.pdf the direct-high-resolution comparison, three examples per row. The
+                      examples of every row, the real radiographs and PanoDiff-SR
+                      included, were chosen by hand by the first author and are listed in
+                      directhr_examples.json (file names per image set, in column order).
+                      Earlier versions of this repository drew three random images per
+                      row (select_random_examples.py) or ranked the examples by an
+                      anatomical criterion (select_best_examples.py).
 
 Run inside the LUMI PyTorch container (needs PIL + matplotlib).
 """
@@ -138,19 +138,18 @@ def directhr_mosaic(out=None):
         ("LDM (direct, $1024\\times512$)",                         "samples/ldm"),
         ("PanoDiff-HR (direct, $1024\\times512$)",                 "samples/panodiff_hr"),
     ]
-    # Three random images per row, the same draw for every row (select_random_examples.py).
-    picks = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "random_examples.json")))["picks"]
-    key = {"refs/real": "real", "refs/PanoDiffSR_existing": "PanoDiffSR_existing", "samples/sg2ada": "sg2ada",
-           "samples/sg3": "sg3", "samples/adm": "adm", "samples/ldm": "ldm", "samples/panodiff_hr": "panodiff_hr"}
+    # Three examples per row, chosen by hand: file names per image set in directhr_examples.json.
+    chosen = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "directhr_examples.json")))["rows"]
     fig, h_pt = figure_for(len(rows))
     for r, (name, rel) in enumerate(rows):
         row_header(fig, r, h_pt, name, bold=(r == 1))
-        pick = picks[key[rel]]
-        assert len(pick) == NCOL and all(os.path.dirname(p) == os.path.join(NB, rel) for p in pick), (rel, pick)
+        pick = [os.path.join(NB, rel, f) for f in chosen[rel]]
+        assert len(pick) == NCOL and all(os.path.isfile(p) for p in pick), (rel, pick)
         for c, p in enumerate(pick):
             ax = fig.add_axes(panel_box(r, c, h_pt))
             frame(ax, load_display(p))
     out = out or f"{FIGS}/fig17-directhr"
+    os.makedirs(out, exist_ok=True)
     fig.savefig(f"{out}/directhr_mosaic.pdf", dpi=400, bbox_inches=None)
     fig.savefig(f"{out}/directhr_mosaic.png", dpi=170)
     plt.close(fig)

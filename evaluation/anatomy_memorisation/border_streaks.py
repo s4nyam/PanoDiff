@@ -2,9 +2,9 @@
 
 A few real radiographs of the corpus carry such a block (rows of pixels smeared sideways over
 roughly the outer fifth of the image). The latent diffusion model reproduces it in about half of
-its samples, which is why one of three randomly drawn LDM images in the direct high-resolution
-figure shows it. This script counts the block in every image set of the anatomical table, on
-ALL images of each set.
+its samples. The examples of the direct high-resolution figure were chosen without it, and the
+caption of that figure says how often it occurs. This script counts the block in every image set
+of the anatomical table, on ALL images of each set.
 
 Measure, per image (grayscale, resized to 512 x 256): in the outer eighth of the width on each
 side, the mean absolute difference between vertically adjacent pixels divided by the mean
@@ -18,7 +18,8 @@ are stored next to the one for THRESHOLD. Checked by eye on contact sheets (2026
 flagged real, PanoDiff-SR and LDM images show the block. A few unflagged images show a narrow or
 partial block (about one in ten of the unflagged LDM images looked at), so the counts are lower
 bounds. The measure is not specific outside these sets: in StyleGAN3 it flags images that are
-smeared as a whole, a different failure, so only the real and LDM counts are quoted in the paper.
+smeared as a whole, a different failure, so only the real, PanoDiff-SR and LDM counts are quoted
+in the paper.
 
 Writes out/border_streaks.json (summary and the ratio of every image).
 """
